@@ -1,27 +1,21 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php';
-/** 
-* A test class
-* 
-* @param  foo bar
-* @return baz
-*/
-class TestClass {
-    
-    /**
-     * 
-     * @param int $param jakis tam parametr
-     * @test success aaa
-     * @return string 
-     */
-    public function functionName($param) {
-        
-    }
-}
+//require __DIR__ . '/../vendor/autoload.php';
 
-require '../src/ParseClass/ParseClass.php';
 
-$parser = new FastRat\FastUnitTest\ParseClass\ParseClass();
-echo "<pre>";
-$parser->parseCommentMethod('TestClass', 'functionName');
-echo "</pre>";
+require_once '../src/Enigne/GenerationTest.php';
+
+$test = \FastRat\FastUnitTest\Engine\GenerationTest::createNewClass('TestClass', 'final');
+
+$method = \FastRat\FastUnitTest\Engine\GenerationTest::createNewMethod('test');
+$method->addParametr('a', null, 'integer');
+$method->addParametr('b', null, 'integer');
+$method->addLineCode('$a *= $b;');
+$method->addLineCode('return $a + $b;');
+$test->addMethod($method);
+
+$variable = \FastRat\FastUnitTest\Engine\GenerationTest::createNewVaraible('data', 'protected', 'array');
+$variable->setDocComment('Dane przechowywane w tablicy');
+
+$test->addVariable($variable);
+
+\FastRat\FastUnitTest\Engine\GenerationTest::saveClassToFile($test);
