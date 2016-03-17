@@ -24,4 +24,36 @@
  * THE SOFTWARE.
  */
 
-echo "ddd";
+
+// set to run indefinitely if needed
+set_time_limit(0);
+
+// Include the Console_CommandLine package.
+require_once 'Console/CommandLine.php';
+
+// create the parser
+$parser = new Console_CommandLine(array(
+    'description' => 'FastUnitTest - create fast unit test',
+    'version'     => '0.0.1'
+));
+
+// add an option to make the program verbose
+
+$parser->addCommand('generate:test:method');
+
+$parser->addArgument('path_to_file', [
+    'description' => 'Ścieżka do pliku z klasą dla której ma być zrobiony test'
+]);
+
+
+
+
+// run the parser
+try {
+    $result = $parser->parse();
+    // write your program here...
+    print_r($result->options);
+    print_r($result->args);
+} catch (Exception $exc) {
+    $parser->displayError($exc->getMessage());
+}
