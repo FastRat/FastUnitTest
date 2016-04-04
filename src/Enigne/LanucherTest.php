@@ -45,10 +45,15 @@ class LanucherTest {
     
     /**
      *
+     * @var \PHPUnit_Framework_TestSuite
+     */
+    protected $suiteTest;
+
+    /**
+     *
      * @var array
      */
     protected $test = [];
-
 
     /**
      * 
@@ -56,7 +61,8 @@ class LanucherTest {
      */
     public function __construct( $vendorPath ) {
         if (file_exists( $vendorPath ) ){
-            $this->pathVendor = $vendorPath;
+            require_once $vendorPath;
+            $this->suiteTest = new \PHPUnit_Framework_TestSuite();
         } else {
             trigger_error('Path to vendor must be exists');
         }
@@ -71,27 +77,31 @@ class LanucherTest {
         if (file_exists( $filename ) == FALSE) {
             trigger_error('File with Class Test not exists');  
         }
-        $path = str_repeat('\\', '/');
+        $path = str_replace('\\', '/', $filename);
         $arrPath = explode('/', $path);
 
-        $test = [];
-        $test['className'] = explode('.', $arrPath[count($arrPath) - 1 ])[0];
-        $test['pathToFile'] = $filename;
-
-        $this->test[] = $test;
+        $this->test[]= explode('.', $arrPath[count($arrPath) - 1 ])[0];
+        try {
+            $this->suiteTest->addTestFile($filename);
+        } catch (\Exception $ex ) {
+            trigger_error("Fail add file test: " . $ex->getMessage() );
+        }
     }
     
+    /**
+     * Execute
+     */
     public function execute() {
-        require_once $this->pathVendor;
-        require_once './../vendor/autoload.php';
+        require_once __DIR__ . '/Lanucher/ListenerEvent.php';
         
-        
-        try{
-            
-        } catch (Exception $ex) {
-
+        $result = new \PHPUnit_Framework_TestResult();
+        $result->addListener( new \ListenerEvent() );
+        try {
+            $this->suiteTest->run($result);
+        } catch (\Exception $ex) {
+            trigger_error($ex->getMessage());
         }
         
-        
     }
+    
 }

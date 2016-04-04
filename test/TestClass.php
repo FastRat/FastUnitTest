@@ -1,12 +1,12 @@
 <?php 
-
+require_once './../vendor/autoload.php';
 /**
  * Description of TestClass
  *
  *
  * Generated thanks FastRat\FastUnitTest
  */
-final class TestClass extends PHPUnit_Framework_CaseTest { 
+class TestClass extends PHPUnit_Framework_TestCase { 
 
     /**
      * Dane przechowywane w tablicy
@@ -20,9 +20,11 @@ final class TestClass extends PHPUnit_Framework_CaseTest {
      *  @param integer $a 
      *  @param integer $b 
      */
-    public function test(  $a,  $b ) {
-        $a *= $b;
-        return $a + $b;
+    public function test(  ) {
+        
+        $aa = false;
+        
+        $this->assertTrue($aa, 'To nie jest prawda!');
     }
 }
 

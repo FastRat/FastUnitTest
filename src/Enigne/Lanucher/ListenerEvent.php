@@ -35,35 +35,81 @@
  */
 class ListenerEvent implements PHPUnit_Framework_TestListener{
     
+    private $data = [];
+    
+    private $suiteTest = [];
+    
+    private $test = [];
+    
+    private $success = true;
+    
     public function startTestSuite(\PHPUnit_Framework_TestSuite $suite) {
+        $this->suiteTest = [];
         
+        $s = [];
+        $s['name'] = $suite->getName();
+        $s['countTest'] = $suite->count();
+        $this->suiteTest = $s;
     }
     
     public function startTest(\PHPUnit_Framework_Test $test) {
-        
+        $this->success = true;
+        $this->test = [];
     }
     
     public function addError(\PHPUnit_Framework_Test $test, \Exception $e, $time) {
-        
+        $t = [];
+        $t['time'] = $time;
+        $t['status'] = 'error';
+        $t['message'] = $e->getMessage();
+        $t['track'] = $e->getTraceAsString();
+        $this->test = $t;
+        $this->success = FALSE;
     }
     
     public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time) {
-        
+        $t = [];
+        $t['time'] = $time;
+        $t['status'] = 'fail';
+        $t['message'] = $e->getMessage();
+        $t['track'] = $e->getTraceAsString();
+        $this->test = $t;
+        $this->success = FALSE;
     }
     
     public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time) {
-        
+        $t = [];
+        $t['time'] = $time;
+        $t['status'] = 'incomplete';
+        $t['message'] = $e->getMessage();
+        $t['track'] = $e->getTraceAsString();
+        $this->test = $t;
+        $this->success = FALSE;
     }
     
     public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time) {
-        
+        $t = [];
+        $t['time'] = $time;
+        $t['status'] = 'skipped';
+        $t['message'] = $e->getMessage();
+        $t['track'] = $e->getTraceAsString();
+        $this->test = $t;
+        $this->success = false;
     }
     
     public function endTest(\PHPUnit_Framework_Test $test, $time) {
-        
+        if ( $this->success ) {
+            $t = [];
+            $t['time'] = $time;
+            $t['status'] = 'success';
+            $t['message'] = '';
+            $t['track'] = '';
+            $this->test = $t;
+        }
+        $this->suiteTest['test'][] = $this->test;
     }
     
     public function endTestSuite(\PHPUnit_Framework_TestSuite $suite) {
-        
+        $this->data[] = $this->suiteTest;
     }
 }
