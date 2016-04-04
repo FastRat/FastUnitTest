@@ -49,6 +49,13 @@ class VirtualClass extends Virtual{
     
     /**
      *
+     * @var string
+     */
+    protected $srcClassExtends = null;
+
+
+    /**
+     *
      * @var array
      */
     protected $methods = [];
@@ -76,14 +83,16 @@ class VirtualClass extends Virtual{
      * @param string $name
      * @param string $extends
      */
-    public function __construct($name, $extends = null, $type = null) {
+    public function __construct($name,  $type = null, $extends = null, $srcClassExtends = null ) {
         parent::__construct($name);
         
         if (is_string($extends) == FALSE ){
             trigger_error('$extends must be string');
             $this->extends = (string)$extends;
+            $this->srcClassExtends = $srcClassExtends;
         }else{
             $this->extends = $extends;
+            $this->srcClassExtends = $srcClassExtends;
         }
         
         if ( is_null($type) == FALSE ) {
@@ -134,6 +143,11 @@ class VirtualClass extends Virtual{
     }
     
     protected function toDocLine( &$codeLine ){
+        if (is_null($this->extends) == FALSE && is_null($this->srcClassExtends) == FALSE ){
+            $codeLine[] = '';
+            $codeLine[] = "require_once '$this->srcClassExtends';"; 
+            $codeLine[] = '';
+        }       
         $codeLine[] = '/**';
         $codeLine[] = ' * Description of ' . $this->name;
         $codeLine[] = ' *';

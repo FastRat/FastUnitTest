@@ -40,7 +40,7 @@ class GenerationTest {
     public static function createNewClass( $className, $type ){
         require_once __DIR__ . '/Virtual/VirtualClass.php';
         
-        return new Virtual\VirtualClass($className, 'PHPUnit_Framework_CaseTest', $type);
+        return new Virtual\VirtualClass($className, $type, 'PHPUnit_Framework_CaseTest', null);
     }
     
     /**

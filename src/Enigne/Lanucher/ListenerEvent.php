@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 Klaudia Wasilewska <klaudiawasilewska98+github@gmail.com>.
+ * Copyright 2016 Piotr Kuźnik <piotr.damian.kuznik@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +24,46 @@
  * THE SOFTWARE.
  */
 
-namespace FastUnitTest\Engine\Test;
-
 /**
- * Description of CreatorMethod
+ * Description of ListenerEvent
  * 
  * @package FastUnitTest
  * @version 0.1
- * @author Klaudia Wasilewska <klaudiawasilewska98+github@gmail.com>
+ * @author Piotr Kuźnik <piotr.damian.kuznik@gmail.com>
  * @license mit
+ * @copyright (c) FastRat
  */
-class CreatorMethod {
+class ListenerEvent implements PHPUnit_Framework_TestListener{
     
-    private $name;
-    
-    public function __construct( $name, $params) {
-        $this->name = $name;
+    public function startTestSuite(\PHPUnit_Framework_TestSuite $suite) {
+        
     }
     
-    public function getName(){
-        return $this->name;
+    public function startTest(\PHPUnit_Framework_Test $test) {
+        
+    }
+    
+    public function addError(\PHPUnit_Framework_Test $test, \Exception $e, $time) {
+        
+    }
+    
+    public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time) {
+        
+    }
+    
+    public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time) {
+        
+    }
+    
+    public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time) {
+        
+    }
+    
+    public function endTest(\PHPUnit_Framework_Test $test, $time) {
+        
+    }
+    
+    public function endTestSuite(\PHPUnit_Framework_TestSuite $suite) {
+        
     }
 }
