@@ -112,4 +112,8 @@ class ListenerEvent implements PHPUnit_Framework_TestListener{
     public function endTestSuite(\PHPUnit_Framework_TestSuite $suite) {
         $this->data[] = $this->suiteTest;
     }
+    
+    public function getData() {
+        return $this->data;
+    }
 }

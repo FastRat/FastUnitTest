@@ -93,15 +93,16 @@ class LanucherTest {
      */
     public function execute() {
         require_once __DIR__ . '/Lanucher/ListenerEvent.php';
+        $listener = new \ListenerEvent();
         
         $result = new \PHPUnit_Framework_TestResult();
-        $result->addListener( new \ListenerEvent() );
+        $result->addListener( $listener );
         try {
             $this->suiteTest->run($result);
         } catch (\Exception $ex) {
             trigger_error($ex->getMessage());
         }
-        
+        return $listener;
     }
     
 }
