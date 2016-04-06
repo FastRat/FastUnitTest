@@ -24,36 +24,40 @@
  * THE SOFTWARE.
  */
 
+require './FastUnitTest.php';
 
 // set to run indefinitely if needed
 set_time_limit(0);
 
-// Include the Console_CommandLine package.
-require_once 'Console/CommandLine.php';
+if (PHP_SAPI !== 'cli') {
+    echo 'Ten tryb nie jest osługiwany.';
+    exit();
+}
 
-// create the parser
-$parser = new Console_CommandLine(array(
-    'description' => 'FastUnitTest - create fast unit test',
-    'version'     => '0.0.1'
-));
-
-// add an option to make the program verbose
-
-$parser->addCommand('generate:test:method');
-
-$parser->addArgument('path_to_file', [
-    'description' => 'Ścieżka do pliku z klasą dla której ma być zrobiony test'
-]);
-
-
-
-
-// run the parser
-try {
-    $result = $parser->parse();
-    // write your program here...
-    print_r($result->options);
-    print_r($result->args);
-} catch (Exception $exc) {
-    $parser->displayError($exc->getMessage());
+if ($argv) {
+    if (isset($argv[1])){
+        $fut = new FastRat\FastUnitTest\FastUnitTest();
+        switch ($argv[1]){
+            case 'generator:test' :
+                if (isset($argv[2])){
+                    $fut->generatorTest($argv[2]);
+                    echo 'This application generate a test.';
+                }
+                break;
+            case 'execute:test' :
+                if (isset($argv[2])){
+                    $fut->executeTest($argv[2]);
+                    echo 'This application execute a test.';
+                }
+                break;
+        }
+    }  else {
+        // help
+        echo "The correct form : php console.php fileName className"
+        . "\nor : php console.php fileName (If class have the same name as File)"
+        . "\n\nconsole.php [generator:test] [execute:test]"
+        . "\n\n generator:test \t If you selected this option, application generate a test."
+        . "\n execute:test \t\t If you selected this option, application execute a test.\n";
+    }
+    
 }

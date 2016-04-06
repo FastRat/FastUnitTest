@@ -95,4 +95,12 @@ class FastUnitTest {
     public function runTest( $testName, $params = [] ) {
         
     }
+    
+    public function generatorTest( $fileName, $className = NULL ) {
+        
+    }
+    
+    public function executeTest( $fileName, $className = NULL) {
+        
+    }
 }
