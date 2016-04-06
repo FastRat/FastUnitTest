@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-require './FastUnitTest.php';
+require __DIR__ . '/FastUnitTest.php';
 
 // set to run indefinitely if needed
 set_time_limit(0);
