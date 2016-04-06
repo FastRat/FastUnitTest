@@ -63,6 +63,7 @@ class LanucherTest {
         if (file_exists( $vendorPath ) ){
             require_once $vendorPath;
             $this->suiteTest = new \PHPUnit_Framework_TestSuite();
+            $this->suiteTest->setName('Main group Class test');
         } else {
             trigger_error('Path to vendor must be exists');
         }
@@ -91,12 +92,16 @@ class LanucherTest {
     /**
      * Execute
      */
-    public function execute() {
-        require_once __DIR__ . '/Lanucher/ListenerEvent.php';
-        $listener = new \ListenerEvent();
+    public function execute( $listenerName = '' ) {
+        require_once __DIR__ . '/Lanucher/ManagerListenerEvent.php';
+        $listener = new Lanucher\ManagerListenerEvent;
         
         $result = new \PHPUnit_Framework_TestResult();
-        $result->addListener( $listener );
+        
+        if ( !empty($listenerName) ){
+            $result->addListener( $listener->load($listenerName));
+        }
+        $result->addListener($listener->load());
         try {
             $this->suiteTest->run($result);
         } catch (\Exception $ex) {
