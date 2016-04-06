@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-require './FastUnitTest.php';
+require __DIR__ . '/FastUnitTest.php';
 
 // set to run indefinitely if needed
 set_time_limit(0);
@@ -40,8 +40,13 @@ if ($argv) {
         switch ($argv[1]){
             case 'generator:test' :
                 if (isset($argv[2])){
-                    $fut->generatorTest($argv[2]);
+                    
                     echo 'This application generate a test.';
+                    if (isset($argv[3])){
+                        $fut->generatorTest($argv[2], $argv[3]);
+                    }else{
+                        $fut->generatorTest($argv[2]);
+                    }
                 }
                 break;
             case 'execute:test' :
