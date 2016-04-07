@@ -72,4 +72,14 @@ class ConverterClass {
         $this->classname = $classname;
         $this->filename = $filename;
     }
+    
+    public function convert() {
+        try {
+            $objectClass = new \ReflectionClass( $this->classname );
+        } catch ( ReflectionException $rx ) {
+            trigger_error('Class not exists');
+        }    
+        
+        
+    }
 }
