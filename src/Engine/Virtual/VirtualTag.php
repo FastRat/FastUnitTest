@@ -43,8 +43,15 @@ class VirtualTag extends Virtual{
      *
      * @var string
      */
-    protected $type = '';
+    protected $param1 = '';
 
+    /**
+     *
+     * @var string
+     */
+    protected $param2 = '';
+
+    
     /**
      *
      * @var string
@@ -53,24 +60,39 @@ class VirtualTag extends Virtual{
     
     /**
      * 
-     * @param string $name
-     * @param string $type
+     * @param string $nameTag
+     * @param string|null $param1
+     * @param string|null $param2
      */
-    public function __construct($name, $type) {
-        parent::__construct($name);
+    public function __construct($nameTag, $param1 = null, $param2 = null ) {
+        parent::__construct($nameTag);
         
-        if (is_string($type)){
-            $this->type = $type;
+        if (is_string($param1)){
+            $this->param1 = $param1;
+        }
+        
+        if (is_string($param2)){
+            $this->param2 = $param2;
         }
     }
     
     /**
-     * Return type tag
+     * Return param 1
      * 
      * @return string
      */
-    public function getType( ) {
-        return $this->type;
+    public function getParam1( ) {
+        return $this->param1;
+    }
+    
+    
+    /**
+     * Return param 2
+     * 
+     * @return string
+     */
+    public function getParam2( ) {
+        return $this->param2;
     }
     
     /**
@@ -105,18 +127,29 @@ class VirtualTag extends Virtual{
     public function toCodeLine() {
         $codeLine = [];
         
+        $param = ' ';
+        
+        if ( empty( $this->param1 ) == FALSE ) {
+            $param .= $this->param1 . ' ';
+        }
+        
+        if ( empty( $this->param2 ) == FALSE ) {
+            $param .= $this->param2 . ' ';
+        }
+        
         if (is_array($this->describe) ) {
             $first = TRUE;
             foreach ($this->describe as $row ){
+                
                 if ($first){
-                    $codeLine[] = '@' . $this->type . ' ' . $this->type .  $row;
+                    $codeLine[] = '@' . $this->name . $param .  $row;
                     $first = FALSE;
                     continue;
                 }
                 $codeLine[] = $row;
             }
         } else {
-            $codeLine[] = '@' . $this->type . ' ' . $this->type . ' ' . $this->describe;
+            $codeLine[] = '@' . $this->name . $param . $this->describe;
         }
         return $codeLine;
     }

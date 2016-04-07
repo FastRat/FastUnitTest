@@ -148,16 +148,30 @@ class VirtualClass extends Virtual{
         $this->variable[] = $variable;
     }
     
+    /**
+     * 
+     * @param \FastRat\FastUnitTest\Engine\Virtual\VirtualTag $tag
+     */
     public function addTag( VirtualTag $tag ) {
         $this->tag[] = $tag;
     }
     
+    /**
+     * 
+     * @param string $name
+     * @param string $type
+     * @param string|array $descibe
+     */
     public function createTag( $name, $type, $descibe = '' ) {
         $tag = new VirtualTag($name, $type);
         $tag->setDescribe($descibe);
         $this->tag[] = $tag;
     }
     
+    /**
+     * 
+     * @param array $codeLine
+     */
     protected function toDocLine( &$codeLine ){
         if (is_null($this->extends) == FALSE && is_null($this->srcClassExtends) == FALSE ){
             $codeLine[] = '';
