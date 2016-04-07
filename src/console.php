@@ -3,7 +3,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2016 pkuznik.
+ * Copyright 2016 kwasilewska.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ require __DIR__ . '/FastUnitTest.php';
 set_time_limit(0);
 
 if (PHP_SAPI !== 'cli') {
-    echo 'Ten tryb nie jest osługiwany.';
+    echo 'This mode is not support.';
     exit();
 }
 
@@ -38,30 +38,35 @@ if ($argv) {
     if (isset($argv[1])){
         $fut = new FastRat\FastUnitTest\FastUnitTest();
         switch ($argv[1]){
-            case 'generator:test' :
+            case 'generate:test' :
                 if (isset($argv[2])){
                     
                     echo 'This application generate a test.';
                     if (isset($argv[3])){
-                        $fut->generatorTest($argv[2], $argv[3]);
+                        $fut->generateTest($argv[2], $argv[3]);
                     }else{
-                        $fut->generatorTest($argv[2]);
+                        $fut->generateTest($argv[2]);
                     }
                 }
                 break;
             case 'execute:test' :
                 if (isset($argv[2])){
-                    $fut->executeTest($argv[2]);
+                    
                     echo 'This application execute a test.';
+                    if (isset($argv[3])){
+                        $fut->executeTest($argv[2], $argv[3]);
+                    }else{
+                        $fut->executeTest($argv[2]);
+                    }
                 }
                 break;
         }
     }  else {
         // help
-        echo "The correct form : php console.php fileName className"
+        echo "The correct form : php console.php mode fileName className"
         . "\nor : php console.php fileName (If class have the same name as File)"
-        . "\n\nconsole.php [generator:test] [execute:test]"
-        . "\n\n generator:test \t If you selected this option, application generate a test."
+        . "\n\nconsole.php [generate:test] [execute:test]"
+        . "\n\n generate:test \t If you selected this option, application generate a test."
         . "\n execute:test \t\t If you selected this option, application execute a test.\n";
     }
     

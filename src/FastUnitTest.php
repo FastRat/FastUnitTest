@@ -96,7 +96,7 @@ class FastUnitTest {
         
     }
     
-    public function generatorTest( $fileName, $className = NULL ) {
+    public function generateTest( $fileName, $className = NULL ) {
         
     }
     
