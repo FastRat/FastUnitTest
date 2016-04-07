@@ -31,9 +31,28 @@ class ResultToHTML {
         
         $this->data = $array;
     }
-    
+    /**
+     * 
+     * @param string $key
+     */
     public function createPie ( $key ) {
+        $dataPie = [];
+        foreach ($this->data as $row) {
+            foreach ($row as $k => $v) {
+                if ($key == $k){
+                    $dataPie[] = $v;
+                }
+            }
+        }
         
+        $t = [];
+        foreach ($dataPie as $row){
+            if(array_key_exists($row, $t)){
+                $t[$row]++;
+            }  else {
+                $t[$row] = 1;
+            }
+        }
     }
     
     public function createTable ( $keys ) {
@@ -41,6 +60,22 @@ class ResultToHTML {
     }
     
     public function createGraph ( $key ) {
+        $dataGraph = [];
+        foreach ($this->data as $row) {
+            foreach ($row as $k => $v) {
+                if ($key == $k){
+                    $dataGraph[] = $v;
+                }
+            }
+        }
         
+        $t = [];
+        foreach ($dataPie as $row){
+            if(array_key_exists($row, $t)){
+                $t[$row]++;
+            }  else {
+                $t[$row] = 1;
+            }
+        }
     }
 }
