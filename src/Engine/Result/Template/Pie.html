@@ -7,45 +7,75 @@ and open the template in the editor.
 <html>
     <head>
         <title>Pie</title>
-        <script src="./Lib/Chart.js"></script>
+        <script src="./Lib/js/Chart.js"></script>
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+            <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="./Lib/css/bootstrap.min.css">
+
+            <!-- Optional theme -->
+        <link rel="stylesheet" href="./Lib/css/bootstrap-theme.min.css">
+
+            <!-- Latest compiled and minified JavaScript -->
+        <script src="./Lib/js/bootstrap.min.js"></script>
+        
+        <link rel="stylesheet" href="./wyglad.css">
+        
     </head>
     <body>
-        <div>
-            <div id="canvas-holder">
-                <canvas id="chart-area" width="300" height="300"/>
+        <div id="warpper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                        <div class="text-right date">Date of create: 2016-04-07 13:09:40</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div id="title" class="text-center">
+                            tytul
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="graph">
+                            <div id="canvas-holder">
+                                <canvas id="chart-area" width="400" height="400"/>
+                            </div>
+                            <script>
+                                var pieData = [
+                                    {
+                                        value: 3,
+                                        color:"#F7464A",
+                                        highlight: "#FF5A5E",
+                                        label: "Red"
+                                    },
+                                    {
+                                        value: 4,
+                                        color: "#46BFBD",
+                                        highlight: "#5AD3D1",
+                                        label: "Green"
+                                    },
+                                    {
+                                        value: 5,
+                                        color: "#FDB45C",
+                                        highlight: "#FFC870",
+                                        label: "Yellow"
+                                    },
+                            ];
+
+                                window.onload = function(){
+                                        var ctx = document.getElementById("chart-area").getContext("2d");
+                                        window.myPie = new Chart(ctx).Pie(pieData);
+                                };
+                            </script>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <script>
-                var pieData = [
-                    {
-                        value: 3,
-                        color:"#F7464A",
-                        highlight: "#FF5A5E",
-                        label: "Red"
-                    },
-                    {
-                        value: 4,
-                        color: "#46BFBD",
-                        highlight: "#5AD3D1",
-                        label: "Green"
-                    },
-                    {
-                        value: 5,
-                        color: "#FDB45C",
-                        highlight: "#FFC870",
-                        label: "Yellow"
-                    },
-            ];
-
-                window.onload = function(){
-                        var ctx = document.getElementById("chart-area").getContext("2d");
-                        window.myPie = new Chart(ctx).Pie(pieData);
-                };
-
-            </script>
         </div>
     </body>
 </html>
