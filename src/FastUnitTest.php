@@ -36,63 +36,49 @@ namespace FastRat\FastUnitTest;
  */
 class FastUnitTest {
 
-    /**
-     *
-     * @var string
-     */
-    private $pathTest;
     
-    /**
-     * Path to dir there are file source code
-     * 
-     * @var string
-     */
-    private $pathToSource;
+    
+    
+    public function generatorTest( $fileName, $className = NULL ) {
+        
+    }
     
     /**
      * 
-     * @param string $dir
-     * @param boolean $makeDir
-     * @throws Exception
+     * @param string $fileName Filename or DIR
+     * @param array $params
      */
-    public function setPathToDirTest( $dir, $makeDir = TRUE ) {
+    public function executeTest( $fileName, $params = [] ) {
         
-        $path = str_replace('\\', '/', $dir);
+        require_once __DIR__ . '/Enigne/LanucherTest.php';
+        $launcher = new Engine\LanucherTest( __DIR__ . '/../vendor/autoload.php' );
+        $test = [];
         
-        if (file_exists($path) == FALSE ) {
-            if ( $makeDir == FALSE ) {
-                throw new Exception( "Path to dir '$path' is not exists!");
-            }  else {
-                mkdir($path);
+        if (is_dir($fileName) ) {
+            foreach (new \DirectoryIterator($fileName) as $file ) {
                 
-                if (file_exists($path) == FALSE ) {
-                    throw new Exception( "Cannot make dir in '$path' !");
+                if ( $file->isFile() ) {
+                    $pos = strpos($file->getFilename(), 'Test');
+                    if ( $pos === false ) {
+                        continue;
+                    }
+                
+                    if (in_array($file->getFilename(), $test)){
+                        continue;
+                    }
+                    $test[] = $file->getFilename();
+                    
+                    $launcher->addClassFileTest($file->getRealPath());
                 }
             }
-        }
-        
-        
-        
-        if (is_dir( $dir ) == FALSE ) {
-            throw new Exception("This path '$path' is not dir!");
-        }
-        $this->pathTest = $path;
-    }
-    
-    public function createTestMethod( $className, $methodName, $testName = null ) {
-        
-        if ( is_null($testName) ) {
-            $testName = 'Test' . $className;
         } else {
-            if (file_exists( $this->pathTest . '/' . $testName . '.php') ){
-                
-            }else{
-                
-            }
+            $launcher->addClassFileTest($fileName);
         }
-    }
-    
-    public function runTest( $testName, $params = [] ) {
+        if ( isset($params['log']) ){
+            $launcher->execute( $params['log'] );
+        } else {
+            $launcher->execute();
+        }
         
     }
     
@@ -100,7 +86,4 @@ class FastUnitTest {
         
     }
     
-    public function executeTest( $fileName, $className = NULL) {
-        
-    }
 }

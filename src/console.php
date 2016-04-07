@@ -34,6 +34,21 @@ if (PHP_SAPI !== 'cli') {
     exit();
 }
 
+function exportRowWithArray($array, $n){ 
+    $arr = [];
+    for ($i=$n; $i<count($array); $i++ ) {
+        $pos = strpos($array[$i], '--');
+        if ( $pos === false ) {
+            continue;
+        }
+        
+        $param = explode('=', str_replace('--', '', $array[$i]));
+        $arr[$param[0]] = $param[1];
+    }
+    
+    return $arr;
+}
+
 if ($argv) {
     if (isset($argv[1])){
         $fut = new FastRat\FastUnitTest\FastUnitTest();
@@ -41,9 +56,9 @@ if ($argv) {
             case 'generate:test' :
                 if (isset($argv[2])){
                     
-                    echo 'This application generate a test.';
+                    echo 'This application generate a test for ' . $argv[2];
                     if (isset($argv[3])){
-                        $fut->generateTest($argv[2], $argv[3]);
+                        $fut->generatorTest($argv[2], exportRowWithArray($argv, 3));
                     }else{
                         $fut->generateTest($argv[2]);
                     }
