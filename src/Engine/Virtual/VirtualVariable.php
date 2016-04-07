@@ -27,7 +27,7 @@
 namespace FastRat\FastUnitTest\Engine\Virtual;
 
 require_once __DIR__ . '/Virtual.php';
-
+require_once __DIR__ . '/VirtualTag.php';
 /**
  * Description of VirtualVariable
  * 
@@ -51,6 +51,12 @@ class VirtualVariable extends Virtual{
 
     protected $doc = [];
 
+    /**
+     *
+     * @var array with VirtualTag
+     */
+    protected $tag = [];
+    
     /**
      * 
      * @param string $name
@@ -79,6 +85,8 @@ class VirtualVariable extends Virtual{
                 
                 trigger_error('$access must be public/protected/private');
         }
+        
+        $this->tag[] = new VirtualTag($name, $type);
     }
     
     /**
