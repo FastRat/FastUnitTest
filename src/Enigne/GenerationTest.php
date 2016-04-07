@@ -37,7 +37,13 @@ namespace FastRat\FastUnitTest\Engine;
  */
 class GenerationTest {
     
-    public static function createNewClass( $className, $type ){
+    /**
+     * 
+     * @param string $className
+     * @param null|string $type
+     * @return \FastRat\FastUnitTest\Engine\Virtual\VirtualClass
+     */
+    public static function createNewClass( $className, $type = null ){
         require_once __DIR__ . '/Virtual/VirtualClass.php';
         
         return new Virtual\VirtualClass($className, $type, 'PHPUnit_Framework_CaseTest', null);

@@ -37,8 +37,6 @@ namespace FastRat\FastUnitTest;
 class FastUnitTest {
 
     
-    
-    
     public function generatorTest( $fileName, $className = NULL ) {
         
     }
@@ -79,21 +77,5 @@ class FastUnitTest {
         } else {
             $launcher->execute();
         }
-        
-    }
-}
-
-licz($array, 2);
-
-function licz($array, $n) {
-    $arr = [];
-    for ($i=$n; $i<count($array); $i++ ) {
-        $pos = strpos($array[$i], '--');
-        if ( $pos === false ) {
-            continue;
-        }
-        
-        $param = explode('=', str_replace('--', '', $array[$i]));
-        $arr[$param[0]] = $param[1];
     }
 }

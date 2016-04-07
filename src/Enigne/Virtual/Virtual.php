@@ -65,4 +65,9 @@ abstract class Virtual {
     public function getName( ) {
         return $this->name;
     }
+    
+    /**
+     * Abstract to create this method
+     */
+    public abstract function toCodeLine();
 }
