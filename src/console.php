@@ -34,6 +34,12 @@ if (PHP_SAPI !== 'cli') {
     exit();
 }
 
+/**
+ * 
+ * @param array $array
+ * @param integer $n
+ * @return array
+ */
 function exportRowWithArray($array, $n){ 
     $arr = [];
     for ($i=$n; $i<count($array); $i++ ) {
@@ -41,7 +47,7 @@ function exportRowWithArray($array, $n){
         if ( $pos === false ) {
             continue;
         }
-        
+            
         $param = explode('=', str_replace('--', '', $array[$i]));
         $arr[$param[0]] = $param[1];
     }
@@ -55,24 +61,36 @@ if ($argv) {
         switch ($argv[1]){
             case 'generate:test' :
                 if (isset($argv[2])){
-                    
-                    echo 'This application generate a test for ' . $argv[2];
+                    echo 'This application generate a test for ' . $argv[2] . "\n";
                     if (isset($argv[3])){
                         $fut->generatorTest($argv[2], exportRowWithArray($argv, 3));
                     }else{
                         $fut->generateTest($argv[2]);
                     }
+                }else {
+                    echo "Used:";
+                    echo "\n\tphp console.php generate:test <filename|dir> --params";
+                    echo "\n\n";
                 }
                 break;
             case 'execute:test' :
                 if (isset($argv[2])){
-                    
-                    echo 'This application execute a test.';
+                    echo 'This application execute a test for ' . $argv[2] . "\n";
                     if (isset($argv[3])){
-                        $fut->executeTest($argv[2], $argv[3]);
+                        $fut->executeTest($argv[2], exportRowWithArray($argv, 3));
                     }else{
                         $fut->executeTest($argv[2]);
                     }
+                }else {
+                    // This is params of execute:test
+                    echo "Used:";
+                    echo "\n\tphp console.php execute:test <filename|dir> --params=value"
+                    . "\n\nparams:";
+                    echo "\n --log \t\t This is the way to show how the test run."
+                    . "\n\t\t inline - This is default register test and it shows the event in console window"
+                    . "\n --result \t This is a result."
+                    . "\n\t\t html <filename> This result is presented on graphs."
+                    . "\n\n";
                 }
                 break;
         }
@@ -81,8 +99,8 @@ if ($argv) {
         echo "The correct form : php console.php mode fileName className"
         . "\nor : php console.php fileName (If class have the same name as File)"
         . "\n\nconsole.php [generate:test] [execute:test]"
-        . "\n\n generate:test \t If you selected this option, application generate a test."
-        . "\n execute:test \t\t If you selected this option, application execute a test.\n";
+        . "\n\n generate:test \t\t If you selected this option, application would generate a test."
+        . "\n execute:test \t\t If you selected this option, application would execute a test.\n";
     }
     
 }
