@@ -36,71 +36,64 @@ namespace FastRat\FastUnitTest;
  */
 class FastUnitTest {
 
-    /**
-     *
-     * @var string
-     */
-    private $pathTest;
     
-    /**
-     * Path to dir there are file source code
-     * 
-     * @var string
-     */
-    private $pathToSource;
     
-    /**
-     * 
-     * @param string $dir
-     * @param boolean $makeDir
-     * @throws Exception
-     */
-    public function setPathToDirTest( $dir, $makeDir = TRUE ) {
-        
-        $path = str_replace('\\', '/', $dir);
-        
-        if (file_exists($path) == FALSE ) {
-            if ( $makeDir == FALSE ) {
-                throw new Exception( "Path to dir '$path' is not exists!");
-            }  else {
-                mkdir($path);
-                
-                if (file_exists($path) == FALSE ) {
-                    throw new Exception( "Cannot make dir in '$path' !");
-                }
-            }
-        }
-        
-        
-        
-        if (is_dir( $dir ) == FALSE ) {
-            throw new Exception("This path '$path' is not dir!");
-        }
-        $this->pathTest = $path;
-    }
-    
-    public function createTestMethod( $className, $methodName, $testName = null ) {
-        
-        if ( is_null($testName) ) {
-            $testName = 'Test' . $className;
-        } else {
-            if (file_exists( $this->pathTest . '/' . $testName . '.php') ){
-                
-            }else{
-                
-            }
-        }
-    }
-    
-    public function runTest( $testName, $params = [] ) {
-        
-    }
     
     public function generatorTest( $fileName, $className = NULL ) {
         
     }
     
-    public function executeTest( $fileName, $className = NULL) {
+    /**
+     * 
+     * @param string $fileName Filename or DIR
+     * @param array $params
+     */
+    public function executeTest( $fileName, $params = [] ) {
         
+        require_once __DIR__ . '/Enigne/LanucherTest.php';
+        $launcher = new Engine\LanucherTest( __DIR__ . '/../vendor/autoload.php' );
+        $test = [];
+        
+        if (is_dir($fileName) ) {
+            foreach (new \DirectoryIterator($fileName) as $file ) {
+                
+                if ( $file->isFile() ) {
+                    $pos = strpos($file->getFilename(), 'Test');
+                    if ( $pos === false ) {
+                        continue;
+                    }
+                
+                    if (in_array($file->getFilename(), $test)){
+                        continue;
+                    }
+                    $test[] = $file->getFilename();
+                    
+                    $launcher->addClassFileTest($file->getRealPath());
+                }
+            }
+        } else {
+            $launcher->addClassFileTest($fileName);
+        }
+        if ( isset($params['log']) ){
+            $launcher->execute( $params['log'] );
+        } else {
+            $launcher->execute();
+        }
+        
+    }
+}
+
+licz($array, 2);
+
+function licz($array, $n) {
+    $arr = [];
+    for ($i=$n; $i<count($array); $i++ ) {
+        $pos = strpos($array[$i], '--');
+        if ( $pos === false ) {
+            continue;
+        }
+        
+        $param = explode('=', str_replace('--', '', $array[$i]));
+        $arr[$param[0]] = $param[1];
     }
 }

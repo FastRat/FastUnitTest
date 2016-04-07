@@ -64,7 +64,7 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
      * @param string $message
      */
     protected function writeEvent( $event, $time, $message = '' ) {
-        echo "\nTest {$this->currentTestSuiteName}::{$this->currentTestName}() - Status: $event - Time: $time " . ($message ? " - Message: " . $message: "");
+        echo "\n\nTest {$this->currentTestSuiteName}::{$this->currentTestName}() - Status: $event - Time: $time " . ($message ? " - Message: " . $message: "");
         
     }
     
