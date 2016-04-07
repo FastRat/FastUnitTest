@@ -3,7 +3,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 Klaudia Wasilewska <klaudiawasilewska98+github@gmail.com>.
+ * Copyright 2016 Piotr Kuźnik <piotr.damian.kuznik@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,69 +24,20 @@
  * THE SOFTWARE.
  */
 
-namespace FastRat\FastUnitTest\ParseClass\ClassDocument;
+namespace FastRat\FastUnitTest\Engine;
 
 /**
- * Description of TagDocument
+ * Description of ConverterClass
  * 
  * @package FastUnitTest
  * @version 0.1
- * @author Klaudia Wasilewska <klaudiawasilewska98+github@gmail.com>
+ * @author Piotr Kuźnik <piotr.damian.kuznik@gmail.com>
  * @license mit
+ * @copyright (c) FastRat
  */
-class TagDocument {
+class ConverterClass {
     
-    /**
-     *
-     * @var string
-     */
-    private  $name;
-    
-    /**
-     *
-     * @var string
-     */
-    private $tag;
-    
-    /**
-     *
-     * @var string
-     */
-    private $description;
-    
-    /**
-     * 
-     * @param string $name
-     * @param string $tag
-     * @param strin $description
-     */
-    public function __construct($name, $tag, $description) {
-        $this->name = $name;
-        $this->tag = $tag;
-        $this->description = $description;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getName(){
-        return $name;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getTag(){
-        return $tag;
-    }
-    
-    /**
-     * 
-     * @return string
-     */
-    public function getDescription(){
-        return $description;
+    public function __construct() {
+        
     }
 }

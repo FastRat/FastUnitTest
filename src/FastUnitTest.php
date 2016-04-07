@@ -37,8 +37,6 @@ namespace FastRat\FastUnitTest;
 class FastUnitTest {
 
     
-    
-    
     public function generatorTest( $fileName, $className = NULL ) {
         
     }
@@ -79,11 +77,9 @@ class FastUnitTest {
         } else {
             $launcher->execute();
         }
-        
     }
-    
+
     public function generateTest( $fileName, $className = NULL ) {
         
     }
-    
 }

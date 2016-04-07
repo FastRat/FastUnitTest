@@ -70,6 +70,12 @@ class VirtualClass extends Virtual{
      *
      * @var array
      */
+    protected $tag = [];
+    
+    /**
+     *
+     * @var array
+     */
     protected $doc = [];
 
     /**
@@ -140,6 +146,16 @@ class VirtualClass extends Virtual{
         }
         
         $this->variable[] = $variable;
+    }
+    
+    public function addTag( VirtualTag $tag ) {
+        $this->tag[] = $tag;
+    }
+    
+    public function createTag( $name, $type, $descibe = '' ) {
+        $tag = new VirtualTag($name, $type);
+        $tag->setDescribe($descibe);
+        $this->tag[] = $tag;
     }
     
     protected function toDocLine( &$codeLine ){
