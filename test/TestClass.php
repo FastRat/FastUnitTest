@@ -1,5 +1,5 @@
 <?php 
-require_once './../vendor/autoload.php';
+
 /**
  * Description of TestClass
  *
@@ -15,16 +15,9 @@ class TestClass extends PHPUnit_Framework_TestCase {
      */
     protected $data;
 
-    /**
-     *
-     *  @param integer $a 
-     *  @param integer $b 
-     */
     public function test(  ) {
         
-        $aa = false;
-        
-        $this->assertTrue($aa, 'To nie jest prawda!');
+        $this->assertArrayHasKey('time', $arr);
     }
 }
 
