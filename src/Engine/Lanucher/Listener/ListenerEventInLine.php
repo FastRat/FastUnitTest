@@ -64,7 +64,10 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
      * @param string $message
      */
     protected function writeEvent( $event, $time, $message = '' ) {
-        echo "\n\nTest {$this->currentTestSuiteName}::{$this->currentTestName}() - Status: $event - Time: $time " . ($message ? " - Message: " . $message: "");
+        echo "\n\nTest: {$this->currentTestSuiteName}::{$this->currentTestName}() "
+        . "\n\tStatus: \t" . strtoupper($event)
+        . "\n\tTime:   \t$time " 
+        . ($message ? "\n\tMessage:\t" . $message: "");
         
     }
     
@@ -140,7 +143,7 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite) { 
         $this->currentTestSuiteName = $suite->getName(); 
         $this->currentTestName      = ''; 
-        echo "\nStarted Suite: " . $this->currentTestSuiteName . " (" . count($suite) . ") test"; 
+        echo "\n Started Suite: \t\t" . $this->currentTestSuiteName . " (" . count($suite) . ") test"; 
     }
     
     /**

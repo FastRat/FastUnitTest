@@ -37,5 +37,7 @@ namespace FastRat\FastUnitTest\Engine;
  */
 class ConverterClass {
     
-    
+    public function __construct() {
+        
+    }
 }

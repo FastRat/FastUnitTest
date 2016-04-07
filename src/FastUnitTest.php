@@ -78,4 +78,8 @@ class FastUnitTest {
             $launcher->execute();
         }
     }
+
+    public function generateTest( $fileName, $className = NULL ) {
+        
+    }
 }
