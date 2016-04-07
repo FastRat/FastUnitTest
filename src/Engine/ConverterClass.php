@@ -151,10 +151,10 @@ class ConverterClass {
         $params = $method->getParameters();
         
         var_dump($params);
+        $tags = $this->getTagElement( $method->getDocComment() );
         
-        $doc = $method->getDocComment();
-        
-        $this->getPHPDocElement($doc);
+        $param = $this->getTagByFilter($tags, 'param');
+        var_dump($param);
         exit;
         $code = $this->getSoruceCode($method);
         
@@ -185,10 +185,15 @@ class ConverterClass {
         return implode('', $body );
     }
 
-    protected function getPHPDocElement( $docComment ) {
-        
+    /**
+     * 
+     * @param string $docComment
+     * @return \FastRat\FastUnitTest\Engine\Virtual\VirtualTag
+     */
+    protected function getTagElement( $docComment ) {
+        require_once __DIR__ . '/Virtual/VirtualTag.php';
         $line = explode('*', str_replace([ '/*', '*/', '' ], '', $docComment));
-        require_once './Virtual/VirtualTag.php';
+        
         $tagGroup = [];
         foreach ( $line as $simple ) {
             
@@ -205,19 +210,57 @@ class ConverterClass {
                     
                     $unset = ['@param', $commentLine[1], $commentLine[2]];
                     $tag->setDescribe(str_replace($unset, '', $commentLine));
+                    
+                    $tagGroup[] = $tag;
                     break;
                 
-                case '@return':
-                    $tag = new Virtual\VirtualTag('param', $commentLine[1]);
+                case '@test':
+                    $tag = new Virtual\VirtualTag('test', $commentLine[1], $commentLine[2]);
                     
-                    $unset = ['@param', $commentLine[1] ];
+                    $unset = ['@param', $commentLine[1], $commentLine[2]];
                     $tag->setDescribe(str_replace($unset, '', $commentLine));
+                    
+                    $tagGroup[] = $tag;
+                    break;
+                
+                case '@return':  
+                case '@version':
+                case '@throws':
+                case '@var':
+                    $tag = new Virtual\VirtualTag(str_replace('@', '', $commentLine[0]), $commentLine[1]);
+                    
+                    $unset = [$commentLine[0], $commentLine[1] ];
+                    $tag->setDescribe(str_replace($unset, '', $commentLine));
+                    
+                    $tagGroup[] = $tag;
                     break;
                 
                 default :
                     continue;
             }
-            $tagGroup[] = $tag;
+            
+        }
+        return $tagGroup;
+    }
+
+    /**
+     * 
+     * @param arrays $groupTag Array with  \Virtual\VirtualTag element
+     * @param string $filter1
+     * @param string|null $filter2
+     */
+    protected function getTagByFilter( $groupTag, $filter1, $filter2 = null ) {
+        $group2 = [];
+        
+        foreach ($groupTag as $tag ) {
+            if (is_null($filter2) && $tag->getName() == $filter1 ) {
+                $group2[] = $tag;
+            }
+            
+            if ( $tag->getName() == $filter1 && $tag->getParam1() == $filter2 ) {
+                $group2[] = $tag;
+            }
+            
         }
     }
 
