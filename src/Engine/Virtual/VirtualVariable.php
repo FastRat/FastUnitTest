@@ -86,7 +86,7 @@ class VirtualVariable extends Virtual{
                 trigger_error('$access must be public/protected/private');
         }
         
-        $this->tag[] = new VirtualTag($name, $type);
+        $this->tag[] = new VirtualTag('var', $type, $name);
     }
     
     /**
@@ -105,6 +105,27 @@ class VirtualVariable extends Virtual{
         $this->doc[] = $string;
     }
     
+    /**
+     * 
+     * @param \FastRat\FastUnitTest\Engine\Virtual\VirtualTag $tag
+     */
+    public function addTag( VirtualTag $tag ) {
+        $this->tag[] = $tag;
+    }
+    
+    /**
+     * 
+     * @param string $tagName
+     * @param string $param1
+     * @param string $param2
+     * @param string|array $descibe
+     */
+    public function createTag( $tagName, $param1 = null, $param2 = null, $descibe = '' ) {
+        $tag = new VirtualTag($tagName, $param1, $param2);
+        $tag->setDescribe($descibe);
+        $this->tag[] = $tag;
+    }
+    
     public function toCodeLine( ) {
         $codeLine = [];
         
@@ -114,8 +135,16 @@ class VirtualVariable extends Virtual{
             $codeLine[] = ' * ' . $line;
         }
         $codeLine[] = ' *';
-        $codeLine[] = ' * @var ' . $this->typeVariable;
+        foreach ( $this->tag as $tag ){
+            $tagLine = $tag->toCodeLine();
+            foreach ($tagLine as $line){
+                $codeLine[] = ' * ' . $line;
+            }
+        }
+               
         $codeLine[] = ' */';
+        
+        
         
         if (is_null($this->defaultValue) ){
             $code = "{$this->access} \${$this->name};";

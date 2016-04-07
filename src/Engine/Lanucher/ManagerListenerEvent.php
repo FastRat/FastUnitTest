@@ -40,7 +40,7 @@ class ManagerListenerEvent {
     /**
      * 
      * @param string $name
-     * @return \ListenerEventInLine
+     * @return \ListenerEventInLine|\ListenerEventLogJSON|\ListenerEventSourceData
      */
     public static function load( $name = 'default' ) {
         
@@ -57,7 +57,10 @@ class ManagerListenerEvent {
                 require_once __DIR__ . '/Listener/ListenerEventLogJSON.php';
                 return new \ListenerEventLogJSON();
                 
-            case '':
+            case 'source':
+                
+                require_once __DIR__ . '/Listener/ListenerEventSourceData.php';
+                return new \ListenerEventSourceData();
             
             default :
                 trigger_error('Cannot find listener ' . $name );

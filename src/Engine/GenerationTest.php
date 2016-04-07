@@ -45,8 +45,7 @@ class GenerationTest {
      */
     public static function createNewClass( $className, $type = null ){
         require_once __DIR__ . '/Virtual/VirtualClass.php';
-        
-        return new Virtual\VirtualClass($className, $type, 'PHPUnit_Framework_CaseTest', null);
+        return new Virtual\VirtualClass($className, $type, 'PHPUnit_Framework_TestCase', null);
     }
     
     /**
@@ -79,10 +78,15 @@ class GenerationTest {
      * 
      * @param \FastRat\FastUnitTest\Engine\Virtual\VirtualClass $class
      */
-    public static function saveClassToFile( Virtual\VirtualClass $class ) {
+    public static function saveClassToFile( Virtual\VirtualClass $class, $pathToDir = null ) {
         
         $filename = $class->getName() . '.php';
         $content = $class->toCodeLine();
+        
+        if ( !is_null($pathToDir) ) {
+            $filename = "$pathToDir/$filename";
+        }
+        echo "\n\n\tSave file to $filename\n\n";
         
         $handle = fopen($filename, 'w');
         fwrite($handle, "<?php \n\n");

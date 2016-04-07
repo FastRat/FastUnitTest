@@ -63,14 +63,19 @@ if ($argv) {
                 if (isset($argv[2])){
                     echo 'This application generate a test for ' . $argv[2] . "\n";
                     if (isset($argv[3])){
-                        $fut->generatorTest($argv[2], exportRowWithArray($argv, 3));
+                        $fut->generateTest($argv[2], exportRowWithArray($argv, 3));
                     }else{
                         $fut->generateTest($argv[2]);
                     }
                 }else {
                     echo "Used:";
                     echo "\n\tphp console.php generate:test <filename|dir> --params";
-                    echo "\n\n";
+                    echo "\n\nparams:";
+                    echo "\n --class \t\t Jeżeli nazwa pliku nie zawiera nazwy klasy"
+                    
+                    . "\n --pathToTestDir \t Ścieżka do folderu, gdzie ma zostac zapisany wygenerowany test"
+                   
+                    . "\n\n";
                 }
                 break;
             case 'execute:test' :

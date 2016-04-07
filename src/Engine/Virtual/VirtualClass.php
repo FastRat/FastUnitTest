@@ -85,6 +85,13 @@ class VirtualClass extends Virtual{
     protected $type = null;
     
     /**
+     *
+     * @var string
+     */
+    protected $nameSpace = null;
+
+
+    /**
      * 
      * @param string $name
      * @param string $extends
@@ -115,6 +122,17 @@ class VirtualClass extends Virtual{
             }
         }
     }
+    
+    /**
+     * 
+     * @param string $namespace
+     */
+    public function setNameSpace( $namespace ){
+        if (is_string($namespace)) {
+            $this->nameSpace = $namespace;
+        }
+    }
+    
     
     /**
      * 
@@ -158,12 +176,13 @@ class VirtualClass extends Virtual{
     
     /**
      * 
-     * @param string $name
-     * @param string $type
+     * @param string $tagName
+     * @param string $param1
+     * @param string $param2
      * @param string|array $descibe
      */
-    public function createTag( $name, $type, $descibe = '' ) {
-        $tag = new VirtualTag($name, $type);
+    public function createTag( $tagName, $param1 = null, $param2 = null, $descibe = '' ) {
+        $tag = new VirtualTag($tagName, $param1, $param2);
         $tag->setDescribe($descibe);
         $this->tag[] = $tag;
     }
@@ -186,6 +205,13 @@ class VirtualClass extends Virtual{
             $codeLine[] = ' * ' . $line;
         }
         
+        foreach ( $this->tag as $tag ){
+            $tagLine = $tag->toCodeLine();
+            foreach ($tagLine as $line){
+                $codeLine[] = ' * ' . $line;
+            }
+        }
+        
         $codeLine[] = ' *';
         $codeLine[] = ' * Generated thanks FastRat\FastUnitTest';
         $codeLine[] = ' */';
@@ -198,6 +224,12 @@ class VirtualClass extends Virtual{
      */
     public function toCodeLine() {
         $codeLine = [];
+        $codeLine[] = '';
+        if (is_null($this->nameSpace) == FALSE && empty( $this->nameSpace) == FALSE ) {
+            $codeLine[] = 'namespace ' . $this->nameSpace . ';';
+        }
+        $codeLine[] = '';
+        
         $this->toDocLine($codeLine);
         
         $type = '';

@@ -1,6 +1,5 @@
 {
     "require": {
-        "phpdocumentor/reflection-docblock": "^3.0",
         "phpunit/phpunit": "3.7.*",
         "sebastian/phpcpd": "^2.0"
     }

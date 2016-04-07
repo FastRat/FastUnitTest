@@ -37,7 +37,28 @@ namespace FastRat\FastUnitTest;
 class FastUnitTest {
 
     
-    public function generatorTest( $fileName, $className = NULL ) {
+    public function generateTest( $fileName, $params = [] ) {
+        require_once __DIR__ . '/Engine/ConverterClass.php';
+        
+        $className = NULL;
+        
+        if ( isset($params['class'])) {
+            $className = $params['class'];
+        }
+        
+        if ( is_dir($fileName) ) {
+            
+        } elseif ( is_file($fileName)) {
+            $converter = new Engine\ConverterClass($fileName, $className);
+            
+            if ( isset($params['pathToTestDir']) ) {
+                $converter->setPathToTestClass( $params['pathToTestDir'] );
+            }
+            
+            $converter->convertAndCreateTest();
+        } else {
+            trigger_error("This `$fileName` is not DIR or FILE");
+        }
         
     }
     
@@ -48,10 +69,9 @@ class FastUnitTest {
      */
     public function executeTest( $fileName, $params = [] ) {
         
-        require_once __DIR__ . '/Enigne/LanucherTest.php';
+        require_once __DIR__ . '/Engine/LanucherTest.php';
         $launcher = new Engine\LanucherTest( __DIR__ . '/../vendor/autoload.php' );
         $test = [];
-        
         if (is_dir($fileName) ) {
             foreach (new \DirectoryIterator($fileName) as $file ) {
                 
@@ -69,7 +89,9 @@ class FastUnitTest {
                     $launcher->addClassFileTest($file->getRealPath());
                 }
             }
-        } else {
+        } 
+        
+        if ( is_file($fileName) ) {
             $launcher->addClassFileTest($fileName);
         }
         if ( isset($params['log']) ){
@@ -77,9 +99,5 @@ class FastUnitTest {
         } else {
             $launcher->execute();
         }
-    }
-
-    public function generateTest( $fileName, $className = NULL ) {
-        
     }
 }
