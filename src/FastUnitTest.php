@@ -48,10 +48,9 @@ class FastUnitTest {
      */
     public function executeTest( $fileName, $params = [] ) {
         
-        require_once __DIR__ . '/Enigne/LanucherTest.php';
+        require_once __DIR__ . '/Engine/LanucherTest.php';
         $launcher = new Engine\LanucherTest( __DIR__ . '/../vendor/autoload.php' );
         $test = [];
-        
         if (is_dir($fileName) ) {
             foreach (new \DirectoryIterator($fileName) as $file ) {
                 

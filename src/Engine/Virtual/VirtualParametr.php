@@ -27,7 +27,7 @@
 namespace FastRat\FastUnitTest\Engine\Virtual;
 
 require_once __DIR__ . '/Virtual.php';
-
+require_once __DIR__ . '/VirtualTag.php';
 /**
  * Description of VirtualParametr
  * 
@@ -53,9 +53,9 @@ class VirtualParametr extends Virtual{
     
     /**
      *
-     * @var string
+     * @var VirtualTag
      */
-    private $doc = null;
+    private $tag = null;
     
     /**
      * 
@@ -79,20 +79,13 @@ class VirtualParametr extends Virtual{
     
     /**
      * 
-     * @param string $string
+     * @return VirtualTag
      */
-    public function setDocComment ( $string ) {
-        $this->doc = $string;
-    }
-    
-    public function toDocLine( ) {
-        $string = '@param ';
-        
-        $string .= (is_null($this->typeVariable)) ?  'mix' : $this->typeVariable;
-        
-        $string .= ' $' . $this->name . ' ' . $this->doc;
-        
-        return $string;
+    public function getTag(){
+        if (is_null($this->tag)){
+            $this->tag = new VirtualTag('param', (is_null($this->typeVariable)) ?  'mix' : $this->typeVariable, $this->name);
+        }
+        return $this->tag;
     }
     
     /**

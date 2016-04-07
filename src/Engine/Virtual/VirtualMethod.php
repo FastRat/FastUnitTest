@@ -27,7 +27,7 @@
 namespace FastRat\FastUnitTest\Engine\Virtual;
 
 require_once __DIR__ . '/VirtualMethod.php';
-
+require_once __DIR__ . '/VirtualTag.php';
 /**
  * Description of VirtualMethod
  * 
@@ -62,6 +62,12 @@ class VirtualMethod extends Virtual{
      * @var array
      */
     protected $lineDoc = [];
+    
+    /**
+     *
+     * @var array
+     */
+    protected $tag = [];
 
     /**
      * 
@@ -88,6 +94,8 @@ class VirtualMethod extends Virtual{
                 
                 trigger_error('$access must be public/protected/private');
         }
+        
+        
     }
     
     /**
@@ -116,6 +124,8 @@ class VirtualMethod extends Virtual{
             $parametr->setTypeVariable($type);
         }
         $this->parametrs[] = $parametr;
+        
+        $this->tag[] = $parametr->getTag();
     }
     
     
@@ -131,6 +141,28 @@ class VirtualMethod extends Virtual{
     public function addLineDoc( $simpleDoc = '' ){
         $this->lineDoc[] = $simpleDoc;
     }
+    
+    /**
+     * 
+     * @param \FastRat\FastUnitTest\Engine\Virtual\VirtualTag $tag
+     */
+    public function addTag( VirtualTag $tag ) {
+        $this->tag[] = $tag;
+    }
+    
+    /**
+     * 
+     * @param string $tagName
+     * @param string $param1
+     * @param string $param2
+     * @param string|array $descibe
+     */
+    public function createTag( $tagName, $param1 = null, $param2 = null, $descibe = '' ) {
+        $tag = new VirtualTag($tagName, $param1, $param2);
+        $tag->setDescribe($descibe);
+        $this->tag[] = $tag;
+    }
+        
     /**
      * 
      *  @return string
@@ -145,10 +177,13 @@ class VirtualMethod extends Virtual{
             $codeLine[] = ' *  ' . $simpleLine;
         }
         $codeLine[] = ' *';
-        foreach ( $this->parametrs as $parametr ){
-            $codeLine[] = ' *  ' . $parametr->toDocLine();
-        }
         
+        foreach ( $this->tag as $tag ){
+            $tagLine = $tag->toCodeLine();
+            foreach ($tagLine as $line){
+                $codeLine[] = ' * ' . $line;
+            }
+        }
         $codeLine[] = ' */';
         
         //code

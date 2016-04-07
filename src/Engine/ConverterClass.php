@@ -37,7 +37,39 @@ namespace FastRat\FastUnitTest\Engine;
  */
 class ConverterClass {
     
-    public function __construct() {
+    /**
+     *
+     * @var string
+     */
+    protected $filename;
+    
+    /**
+     *
+     * @var string
+     */
+    protected $classname;
+
+
+    public function __construct( $filename, $classname = null ) {
         
+        try {
+            require_once $filename;
+        } catch (Exception $ex) {
+            trigger_error('Fail open file');
+        }
+        
+        if (is_null($classname)) {
+            $path = explode('/', str_replace('\\', '/', $filename));
+            $file = $path[count($path) -1 ];
+            
+            $classname = explode('.', $file)[0];
+        }
+        
+        if ( !class_exists($classname, false) ) {
+            trigger_error('Class about name ' . $classname . ' is not exists!');
+        }
+        
+        $this->classname = $classname;
+        $this->filename = $filename;
     }
 }

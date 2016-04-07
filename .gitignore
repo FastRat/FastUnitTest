@@ -49,3 +49,8 @@ Temporary Items
 #DIR
 vendor/
 test/
+test/TestClass.php
+test/test.php
+vendor/autoload.php
+vendor/composer/autoload_classmap.php
+vendor/phpdocumentor/reflection-docblock/src/DocBlock/DescriptionFactory.php

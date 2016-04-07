@@ -27,7 +27,7 @@
 //namespace FastRat\FastUnitTest\Engine\Lanucher\Listener;
 
 /**
- * Description of ListenerEventInLine
+ * Description of ListenerEventSourceData
  * 
  * @package FastUnitTest
  * @version 0.1
@@ -35,7 +35,7 @@
  * @license mit
  * @copyright (c) FastRat
  */
-class ListenerEventInLine implements PHPUnit_Framework_TestListener {
+class ListenerEventSourceData implements PHPUnit_Framework_TestListener {
     
     /**
      * Current test suite name
@@ -69,6 +69,12 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
      */
     protected $currentTestNumber = 0;
 
+    /**
+     *
+     * @var array
+     */
+    protected $sourceData = [];
+
 
     /**
      * 
@@ -76,13 +82,25 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
      * @param float $time
      * @param string $message
      */
-    protected function writeEvent( $event, $time, $message = '' ) {
+    protected function writeEvent( $event, $time, $message = '', $trace = '' ) {
         $this->currentTestNumber++;
-        echo "\n\nTest: {$this->currentTestSuiteName}::{$this->currentTestName}() "
-        . "\n\tStatus: \t" . strtoupper($event)
-        . "\n\tTime:   \t$time " 
-        . ($message ? "\n\tMessage:\t" . $message: "");
         
+        $data = [];
+        $data['suite'] = $this->currentTestSuiteName;
+        $data['test'] = $this->currentTestSuiteName . '::' . $this->currentTestName;
+        $data['index'] = $this->currentTestNumber;
+        $data['status'] = $event;
+        $data['time'] = $time;
+        
+        
+        if ( empty( $trace ) == FALSE ) {
+            $data['trace'] = $trace;
+        }
+        if ( empty( $message ) == FALSE ) {
+            $data['message'] = $message;
+        }
+        
+        $this->sourceData[] = $data;
     }
     
     /**
@@ -92,7 +110,7 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
      * @param float $time
      */
     public function addError(\PHPUnit_Framework_Test $test, \Exception $e, $time) {
-        $this->writeEvent('error', $time, $e->getMessage() );
+        $this->writeEvent('error', $time, $e->getMessage(), $e->getTraceAsString() );
         $this->currentTestPass = FALSE;
     }
     
@@ -103,7 +121,7 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
      * @param float $time
      */
     public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time) {
-        $this->writeEvent('fail', $time, $e->getMessage() );
+        $this->writeEvent('fail', $time, $e->getMessage(), $e->getTraceAsString() );
         $this->currentTestPass = FALSE;
     }
     
@@ -114,7 +132,7 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
      * @param float $time
      */
     public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time) {
-        $this->writeEvent('incomplete', $time, $e->getMessage() );
+        $this->writeEvent('incomplete', $time, $e->getMessage(), $e->getTraceAsString() );
         $this->currentTestPass = FALSE;
     }
     
@@ -125,7 +143,7 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
      * @param float $time
      */
     public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time) {
-        $this->writeEvent('skipped', $time, $e->getMessage() );
+        $this->writeEvent('skipped', $time, $e->getMessage(), $e->getTraceAsString() );
         $this->currentTestPass = FALSE;
     }
     
@@ -157,13 +175,7 @@ class ListenerEventInLine implements PHPUnit_Framework_TestListener {
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite) { 
         $this->currentTestSuiteName = $suite->getName(); 
         $this->currentTestName      = ''; 
-        $this->currentSuiteTestNumber++;
-        
-        if ( $this->currentSuiteTestNumber > 2 ){
-            echo "\n\n\n";
-        }
-        $this->firstSuite = false;
-        echo "\n Started Suite: \t\t" . $this->currentTestSuiteName . " (" . count($suite) . ") test"; 
+        $this->currentSuiteTest++;
     }
     
     /**
