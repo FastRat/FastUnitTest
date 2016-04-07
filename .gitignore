@@ -59,3 +59,4 @@ vendor/composer/autoload_psr4.php
 vendor/composer/ClassLoader.php
 vendor/composer/LICENSE
 vendor/autoload.php
+nbproject/
