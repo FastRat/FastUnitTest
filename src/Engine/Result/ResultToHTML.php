@@ -56,11 +56,27 @@ class ResultToHTML {
         
         $data = [];
         
+        $color = [
+            'success' => "#43A047",
+            'error' => "#D50000",
+            'fail' => "#B71C1C",
+            'skipped' => "#0D47A1",
+            'incomplete' => "#1DE9B6"
+        ];
+        
+        $highlight = [
+            'success' => "#66BB6A",
+            'error' => "#F44336",
+            'fail' => "#D32F2F",
+            'skipped' => "#1565C0",
+            'incomplete' => "#64FFDA"
+        ];
+        
         foreach ($t as $status => $value){
             $row = [
                 'value' => $value,
-                'color' => "#F7464A",
-                'highlight' => "#FF5A5E",
+                'color' => '"' . $color[$status] . '"',
+                'highlight' => '"' . $highlight[$status] . '"',
                 'label' => $status
             ];
             $data[] = $row;
@@ -85,18 +101,68 @@ class ResultToHTML {
     }
     
     public function createTable ( $keys = [] ) {
+        $dataTable = [];
+        foreach ($this->data as $row) {
+            $dataRow = [];
+            $keyTable = [];
+            foreach ($row as $k => $v) {
+                if(in_array($k, $keys)){
+                    $dataRow[$k] = $v;
+                }
+                if(!in_array($k, $keys)){
+                    $keyTable[] = $k;
+                }
+            }
+            $dataTable[] = $dataRow;
+        }
         
+        require_once __DIR__ . '/HtmlTemplateFlexy.php';
+        $flexy = new HtmlTemplateFlexy();
+        
+        $flexy->setData([
+            'data' => $dataTable,
+            'columns' => $keyTable,
+            'date' => date('Y-m-d H:i:s'),
+            'title' => 'Przykladowy tytuł',
+        ]);
+        
+        $flexy->requireLib('js/Chart.js');
+        $flexy->requireLib('js/bootstrap.min.js');
+        $flexy->requireLib('css/bootstrap.min.css');
+        $flexy->requireLib('css/bootstrap-theme.min.css');
+        
+        $flexy->compileToFile('Table.html', 'test.html');
     }
     
-    public function createGraph ( $key ) {
+    public function createGraph (  ) {
         $dataGraph = [];
+        $indexGraph = [];
         foreach ($this->data as $row) {
             foreach ($row as $k => $v) {
-                if ($key == $k){
+                if ('time' == $k){
                     $dataGraph[] = $v;
+                }
+                if('test' == $k){
+                    $indexGraph[] = $v;
                 }
             }
         }
         
+        require_once __DIR__ . '/HtmlTemplateFlexy.php';
+        $flexy = new HtmlTemplateFlexy();
+        
+        $flexy->setData([
+            'time' => implode(', ', $dataGraph),
+            'test' => implode(', ',$indexGraph),
+            'date' => date('Y-m-d H:i:s'),
+            'title' => 'Przykladowy tytuł',
+        ]);
+        
+        $flexy->requireLib('js/Chart.js');
+        $flexy->requireLib('js/bootstrap.min.js');
+        $flexy->requireLib('css/bootstrap.min.css');
+        $flexy->requireLib('css/bootstrap-theme.min.css');
+        
+        $flexy->compileToFile('Graph.html', 'test.html');
     }
 }

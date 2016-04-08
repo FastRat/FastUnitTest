@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Graph</title>
+        <script src="./Lib/js/Chart.js"></script>
+        
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+            <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="./Lib/css/bootstrap.min.css">
+
+            <!-- Optional theme -->
+        <link rel="stylesheet" href="./Lib/css/bootstrap-theme.min.css">
+
+            <!-- Latest compiled and minified JavaScript -->
+        <script src="./Lib/js/bootstrap.min.js"></script>
+        
+        <link rel="stylesheet" href="./Lib/wyglad.css">
+    </head>
+    <body>
+        <div class="warpper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-offset-1 col-md-offset-1 col-sm-offset-1 col-xs-offset-1 col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                        <div class="text-right date">Date of create: 2016-04-08 08:30:45</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div id="title" class="text-center">
+                            Graph
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="graph">
+                            <div id="canvas-bg" style="width:30%">
+                                <canvas id="canvas" height="450" width="600"></canvas>
+                            </div>
+                            <script>
+                                var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+                                var lineChartData = {
+                                    labels : [ "test1", "test2", "test3", "test4" ],
+                                    datasets : [
+                                    {
+                                        label: "My Second dataset",
+                                        fillColor : "rgba(151,187,205,0.2)",
+                                        strokeColor : "rgba(151,187,205,1)",
+                                        pointColor : "rgba(151,187,205,1)",
+                                        pointStrokeColor : "#fff",
+                                        pointHighlightFill : "#fff",
+                                        pointHighlightStroke : "rgba(151,187,205,1)",
+                                        data : [ 423, 532, 1235, 543 ]
+                                    }]
+                                }
+
+                                window.onload = function(){
+                                    var ctx = document.getElementById("canvas").getContext("2d");
+                                    window.myLine = new Chart(ctx).Line(lineChartData, {
+                                        responsive: true
+                                    });
+                                }               
+                            </script>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

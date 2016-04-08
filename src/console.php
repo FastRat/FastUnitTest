@@ -71,9 +71,9 @@ if ($argv) {
                     echo "Used:";
                     echo "\n\tphp console.php generate:test <filename|dir> --params";
                     echo "\n\nparams:";
-                    echo "\n --class \t\t Jeżeli nazwa pliku nie zawiera nazwy klasy"
+                    echo "\n --class \t\t If name of file hasn't name of class"
                     
-                    . "\n --pathToTestDir \t Ścieżka do folderu, gdzie ma zostac zapisany wygenerowany test"
+                    . "\n --pathToTestDir \t Path to the dir, where the generation test will be saved."
                    
                     . "\n\n";
                 }

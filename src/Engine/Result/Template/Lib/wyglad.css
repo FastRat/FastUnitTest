@@ -25,3 +25,6 @@ canvas{
 #title{
     font-size: 30px;
 }
+#canvas-bg{
+    margin: 0 auto;
+}
