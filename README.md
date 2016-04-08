@@ -17,6 +17,13 @@ You must usage special tag in comment block before class, method and variable
 `@test return error {condition}`
 `@test return fail {condition}`
 
-##### condition for return
+#### Result return
+`@test result success {condition}`
+`@test result error {condition}`
+`@test result fail {condition}`
 
+
+##### condition for return
 `(return >= true)` You can compare values with default type value such as *NULL*, *BOOLEAN*, *STRING*, *INTEGER*, *ARRAY*, *OBJECT*
+`return` This is value, than method is return
+`object` This is objeect, that is testing

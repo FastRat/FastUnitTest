@@ -116,12 +116,6 @@ class ConverterClass {
         $test = GenerationTest::createNewClass('Test' . $this->classname );
         $test->createTag('test', $this->classname);
         
-        $construct = $objectClass->getConstructor();
-        
-        if ( FALSE == is_null($construct) ){
-           // $test->addMethod( $this->convertAndCreateTest($construct) );
-        }
-        
         foreach ($objectClass->getMethods( \ReflectionMethod::IS_PUBLIC) as $method ) {
             
             if ( !empty($methodName) && is_array($methodName) && in_array($method->getName(), $methodName) ) {
@@ -149,15 +143,24 @@ class ConverterClass {
         
         
         $params = $method->getParameters();
-        
-        var_dump($params);
         $tags = $this->getTagElement( $method->getDocComment() );
         
-        $param = $this->getTagByFilter($tags, 'param');
-        var_dump($param);
-        exit;
-        $code = $this->getSoruceCode($method);
+        $methodTest->addLineCode("require_once '". realpath($this->filename) ."';");
+        $parameters = ' ';
+        $fisrt = true;
+        foreach ($params as $simple) {
+            $test = $this->getTagTestByFilter($tags, 'param', $simple->getName() );
+            var_dump($test);
+            if ( $fisrt ) {
+                $fisrt = false;
+                $parameters .= $this->getValue( $test->getDescribe() );
+                continue;
+            }
+            $parameters .= ', ' . $this->getValue( $test->getDescribe() );
+        }
         
+        $methodTest->addLineCode('$object = new ' . $this->classname . '(' . $parameters . ');');
+                
         return $methodTest;
     }
     
@@ -192,6 +195,7 @@ class ConverterClass {
      */
     protected function getTagElement( $docComment ) {
         require_once __DIR__ . '/Virtual/VirtualTag.php';
+
         $line = explode('*', str_replace([ '/*', '*/', '' ], '', $docComment));
         
         $tagGroup = [];
@@ -203,22 +207,22 @@ class ConverterClass {
             
             $commentLine = explode(' ', $simple);
             
-            switch ( $commentLine[0] ) {
+            switch ( $commentLine[1] ) {
                 
                 case '@param':
-                    $tag = new Virtual\VirtualTag('param', $commentLine[1], $commentLine[2]);
+                    $tag = new Virtual\VirtualTag('param', trim($commentLine[2]), trim($commentLine[3]));
                     
-                    $unset = ['@param', $commentLine[1], $commentLine[2]];
-                    $tag->setDescribe(str_replace($unset, '', $commentLine));
+                    $unset = ['@param', $commentLine[2], $commentLine[3]];
+                    $tag->setDescribe( trim(str_replace($unset, '', $simple)));
                     
                     $tagGroup[] = $tag;
                     break;
                 
                 case '@test':
-                    $tag = new Virtual\VirtualTag('test', $commentLine[1], $commentLine[2]);
+                    $tag = new Virtual\VirtualTag('test', trim($commentLine[2]), trim($commentLine[3]));
                     
-                    $unset = ['@param', $commentLine[1], $commentLine[2]];
-                    $tag->setDescribe(str_replace($unset, '', $commentLine));
+                    $unset = ['@test', $commentLine[2], $commentLine[3]];
+                    $tag->setDescribe(trim(str_replace($unset, '', $simple)));
                     
                     $tagGroup[] = $tag;
                     break;
@@ -227,10 +231,10 @@ class ConverterClass {
                 case '@version':
                 case '@throws':
                 case '@var':
-                    $tag = new Virtual\VirtualTag(str_replace('@', '', $commentLine[0]), $commentLine[1]);
+                    $tag = new Virtual\VirtualTag(str_replace('@', '', trim($commentLine[1])), trim($commentLine[2]) );
                     
-                    $unset = [$commentLine[0], $commentLine[1] ];
-                    $tag->setDescribe(str_replace($unset, '', $commentLine));
+                    $unset = [$commentLine[1], $commentLine[2] ];
+                    $tag->setDescribe(trim( str_replace($unset, '', $simple) ));
                     
                     $tagGroup[] = $tag;
                     break;
@@ -248,6 +252,7 @@ class ConverterClass {
      * @param arrays $groupTag Array with  \Virtual\VirtualTag element
      * @param string $filter1
      * @param string|null $filter2
+     * @return Virtual\VirtualTag
      */
     protected function getTagByFilter( $groupTag, $filter1, $filter2 = null ) {
         $group2 = [];
@@ -255,15 +260,68 @@ class ConverterClass {
         foreach ($groupTag as $tag ) {
             if (is_null($filter2) && $tag->getName() == $filter1 ) {
                 $group2[] = $tag;
+                continue;
             }
+            $tagFilter = trim(str_replace(['$', ' '], '', $tag->getParam2() ) );
             
-            if ( $tag->getName() == $filter1 && $tag->getParam1() == $filter2 ) {
+            if ( $tag->getName() == $filter1 && $tagFilter == $filter2 ) {
                 $group2[] = $tag;
+                continue;
             }
             
         }
+        return $group2;
+    }
+    
+    /**
+     * 
+     * @param arrays $groupTag Array with  \Virtual\VirtualTag element
+     * @param string $filter1
+     * @param string|null $filter2
+     * @return Virtual\VirtualTag
+     */
+    protected function getTagTestByFilter( $groupTag, $filter1, $filter2 ) {
+        $group2 = [];
+        
+        foreach ($groupTag as $tag ) {
+            $tagFilter = trim(str_replace(['$', ' '], '', $tag->getParam2() ) );
+ 
+            if ( $tag->getName() == 'test' && $tagFilter == $filter2  && $filter1 == trim($tag->getParam1() )) {
+                $group2[] = $tag;
+                continue;
+            }
+            
+        }
+        return $group2;
     }
 
+    /**
+     * 
+     * @param string $command
+     * @return string
+     */
+    protected function getValue( $command ) {
+        $data = '';
+        $command = trim($command);
+        echo "\nCommand : " . $command;
+        $param = explode(',', str_replace(['(', ')'], '', stristr($command, '(')));
+        switch (stristr($command, '(', true) ) {
+            case 'rand':
+                $data = "rand( $param[0], $param[1] )";
+                break;
+            
+            case 'uniqid':
+                $data = "uniqid()";
+                break;
+            
+            default :
+                if ( !function_exists($command) ) {
+                    $data = "'$command'";
+                }
+        }
+        
+        return $data;
+    }
 
     /**
      * 

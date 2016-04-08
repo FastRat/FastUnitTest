@@ -109,6 +109,7 @@ class VirtualTag extends Virtual{
         }  
     }
     
+
     /**
      * 
      * @return string
