@@ -285,7 +285,7 @@ class ConverterClass {
         
         foreach ($groupTag as $tag ) {
             $tagFilter = trim(str_replace(['$', ' '], '', $tag->getParam2() ) );
- 
+            
             if ( $tag->getName() == 'test' && $tagFilter == $filter2  && $filter1 == trim($tag->getParam1() )) {
                 $group2[] = $tag;
                 continue;
