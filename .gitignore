@@ -49,4 +49,16 @@ Temporary Items
 #DIR
 vendor/
 test/
+<<<<<<< HEAD
+=======
+test/TestClass.php
+test/test.php
+vendor/autoload.php
+vendor/composer/autoload_classmap.php
+vendor/composer/autoload_classmap.php
+vendor/composer/autoload_psr4.php
+vendor/composer/ClassLoader.php
+vendor/composer/LICENSE
+vendor/autoload.php
+>>>>>>> origin/master
 nbproject/

@@ -53,9 +53,38 @@ class ResultToHTML {
                 $t[$row] = 1;
             }
         }
+        
+        $data = [];
+        
+        foreach ($t as $status => $value){
+            $row = [
+                'value' => $value,
+                'color' => "#F7464A",
+                'highlight' => "#FF5A5E",
+                'label' => $status
+            ];
+            $data[] = $row;
+        }
+        
+        require_once __DIR__ . '/HtmlTemplateFlexy.php';
+        $flexy = new HtmlTemplateFlexy();
+        
+        $flexy->setData([
+            'pie' => $t,
+            'date' => date('Y-m-d H:i:s'),
+            'title' => 'Przykladowy tytuł',
+            'data' => $data,
+        ]);
+        
+        $flexy->requireLib('js/Chart.js');
+        $flexy->requireLib('js/bootstrap.min.js');
+        $flexy->requireLib('css/bootstrap.min.css');
+        $flexy->requireLib('css/bootstrap-theme.min.css');
+        
+        $flexy->compileToFile('Pie.html', 'test.html');
     }
     
-    public function createTable ( $keys ) {
+    public function createTable ( $keys = [] ) {
         
     }
     
@@ -69,13 +98,5 @@ class ResultToHTML {
             }
         }
         
-        $t = [];
-        foreach ($dataPie as $row){
-            if(array_key_exists($row, $t)){
-                $t[$row]++;
-            }  else {
-                $t[$row] = 1;
-            }
-        }
     }
 }
