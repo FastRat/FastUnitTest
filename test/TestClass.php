@@ -1,5 +1,4 @@
 <?php 
-require_once './../vendor/autoload.php';
 /**
  * Description of TestClass
  *
@@ -8,22 +7,21 @@ require_once './../vendor/autoload.php';
  */
 class TestClass extends PHPUnit_Framework_TestCase { 
 
-    /**
-     * Dane przechowywane w tablicy
-     *
-     * @var array
-     */
-    protected $data;
 
     /**
      *
      *  @param integer $a 
      *  @param integer $b 
      */
-    public function test(  ) {
+    public function testMethod(  ) {
         
         $aa = false;
         
+        $this->assertTrue($aa, 'To nie jest prawda!');
+    }
+    
+    public function testMethod2 () {
+        $aa = true;
         $this->assertTrue($aa, 'To nie jest prawda!');
     }
 }
